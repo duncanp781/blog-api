@@ -7,7 +7,6 @@ export interface IPost {
   content: string,
   author: mongoose.Types.ObjectId,
   public: boolean,
-  _id: mongoose.Types.ObjectId,
 }
 
 const Post = new Schema<IPost>({

@@ -14,7 +14,6 @@ export const post_login = (req: Request, res: Response, next: NextFunction) => {
   }
   if (process.env.JWT_SECRET) {
     const token = jwt.sign(JSON.stringify(req.user), process.env.JWT_SECRET);
-    console.log(req.user)
     return res.json({ token });
   } else {
     res.status(500).json({
@@ -54,7 +53,6 @@ export const post_signup = (
             JSON.stringify(req.user),
             process.env.JWT_SECRET
           );
-          console.log(req.user)
           return res.json({ token });
         } else {
           res.status(500).json({

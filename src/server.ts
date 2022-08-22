@@ -52,6 +52,17 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //Setting up auth
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface User {
+      username: string,
+      password: string,
+      _id: mongoose.Types.ObjectId,
+    }
+  }
+}
+
 passport.use(new LocalStrategy( function(username, password, done){
   User.findOne({username: username}, (err: Error, user: any) => {
     if (err){
