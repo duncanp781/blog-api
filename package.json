@@ -56,7 +56,13 @@
     "build.ts"
   ],
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/compression": "^1.7.2",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/passport": "^1.0.10",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-local": "^1.0.34",
+    "bcryptjs": "^2.4.3",
     "command-line-args": "^5.2.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -67,9 +73,13 @@
     "http-status-codes": "^2.2.0",
     "jet-logger": "^1.2.3",
     "jsonfile": "^6.1.0",
+    "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "mongoose": "^6.5.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "@types/command-line-args": "^5.2.0",

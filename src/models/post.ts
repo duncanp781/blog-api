@@ -2,11 +2,12 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-interface IPost {
+export interface IPost {
   title: string,
   content: string,
   author: mongoose.Types.ObjectId,
   public: boolean,
+  _id: mongoose.Types.ObjectId,
 }
 
 const Post = new Schema<IPost>({
@@ -16,4 +17,4 @@ const Post = new Schema<IPost>({
   public: {type: Boolean, required: true},
 }, {timestamps: true});
 
-export default mongoose.model("Post", Post);
+export default mongoose.model<IPost>("Post", Post);
