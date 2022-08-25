@@ -1,8 +1,6 @@
 import Post, { IPost } from "@models/post";
 import { Request, Response, NextFunction } from "express";
-import async from "async";
 import Comment from "@models/comment";
-import { IUser } from "@models/user";
 
 export const create_post = (
   req: Request,
@@ -152,21 +150,50 @@ export const create_comment = (
   });
 };
 
-
-export const get_user_posts = (req:Request, res: Response, next: NextFunction) => {
-  if (req.user && req.user._id.toString() === req.params.id){
-    Post.find({user: req.params.id}).populate("author", "username").exec((err, posts) => {
-      if(err){
-        return next(err);
-      }
-      res.json(posts);
-    })
-  }else{
-    Post.find({user: req.params.user, public: true}).exec((err, posts) => {
-      if(err){
-        return next(err);
-      }
-      res.json(posts);
-    })
+export const update_post = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user || req.user._id.toString() !== req.params.id) {
+    res.sendStatus(403);
+    return;
   }
-}
+  Post.findByIdAndUpdate(req.params.id, req.body as IPost, { new: true }).exec(
+    (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.sendStatus(204);
+      return;
+    }
+  );
+};
+
+export const get_user_posts = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && req.user._id.toString() === req.params.id) {
+    Post.find({ author: req.params.id })
+      .populate("author", "username")
+      .exec((err, posts) => {
+        if (err) {
+          return next(err);
+        }
+        res.json(posts);
+      });
+  } else {
+    Post.find({ user: req.params.id, public: true })
+      .populate("author", "username")
+      .exec((err, posts) => {
+        if (err) {
+          return next(err);
+        }
+        res.json(posts);
+      });
+      next();
+  }
+};
+

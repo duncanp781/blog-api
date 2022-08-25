@@ -14,7 +14,11 @@ export const post_login = (req: Request, res: Response, next: NextFunction) => {
   }
   if (process.env.JWT_SECRET) {
     const token = jwt.sign(JSON.stringify(req.user), process.env.JWT_SECRET);
-    return res.json({ token });
+    return res.json({
+      username: req.user.username,
+      _id: req.user._id,
+      token,
+    });
   } else {
     res.status(500).json({
       message: "Internal server error",
@@ -44,7 +48,7 @@ export const post_signup = (
         }
         return next(err);
       }
-      req.login(userModel, {session: false}, (err) => {
+      req.login(userModel, { session: false }, (err) => {
         if (err) {
           return next(err);
         }
@@ -53,7 +57,11 @@ export const post_signup = (
             JSON.stringify(req.user),
             process.env.JWT_SECRET
           );
-          return res.json({ token });
+          return res.json({
+            username: req.user?.username,
+            _id: req.user?._id,
+            token,
+          });
         } else {
           res.status(500).json({
             message: "Internal server error",

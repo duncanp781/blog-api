@@ -10,6 +10,7 @@ import passportJWT from 'passport-jwt';
 import User, { IUser } from "@models/user";
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
 dotenv.config();
 
 import express, { NextFunction, Request, Response } from "express";
@@ -107,7 +108,7 @@ app.use(passport.initialize());
 
 
 // Export here and start in a diff file (for testing).
-
-app.use('/', router);
+app.use(cors<Request>());
+app.use('/api', router);
 
 export default app;

@@ -16,6 +16,7 @@ import {
   delete_post,
   delete_comment,
   get_user_posts,
+  update_post,
 } from "src/controllers/postController";
 
 // Export the base-router
@@ -64,7 +65,20 @@ router.delete(
 );
 
 //Will show the public posts of the user if not logged in as the user, otherwise shows all
-router.get("/user/:id/posts", get_user_posts)
+router.get(
+  "/user/:id/posts",
+  passport.authenticate("jwt", { session: false }) as RequestHandler,
+  get_user_posts
+);
+
+
+//Updating a post is protected
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+router.put(
+  "/post/:id",
+  passport.authenticate("jwt", { session: false }),
+  update_post
+);
 
 // Export default.
 export default router;
