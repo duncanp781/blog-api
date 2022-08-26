@@ -1,6 +1,7 @@
 import Post, { IPost } from "@models/post";
 import { Request, Response, NextFunction } from "express";
 import Comment from "@models/comment";
+import User from "@models/user";
 
 export const create_post = (
   req: Request,
@@ -193,7 +194,21 @@ export const get_user_posts = (
         }
         res.json(posts);
       });
-      next();
   }
 };
 
+export const get_user = (req: Request, res: Response, next: NextFunction) => {
+  User.findById(req.params.id).exec((err, user) => {
+    if(err){
+      return next(err);
+    }
+    if(!user){
+      res.sendStatus(404);
+      return;
+    }
+    res.json({
+      username: user.username,
+      _id: user._id,
+    });
+  });
+}

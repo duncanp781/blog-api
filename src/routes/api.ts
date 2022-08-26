@@ -17,6 +17,7 @@ import {
   delete_comment,
   get_user_posts,
   update_post,
+  get_user,
 } from "src/controllers/postController";
 
 // Export the base-router
@@ -71,12 +72,16 @@ router.get(
   get_user_posts
 );
 
+router.get(
+  "/user/:id",
+  get_user
+)
 
 //Updating a post is protected
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 router.put(
   "/post/:id",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }) as RequestHandler,
   update_post
 );
 
