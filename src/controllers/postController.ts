@@ -134,7 +134,7 @@ export const create_comment = (
     const newComment = new Comment({
       post: req.params.id,
       user: req.user._id,
-      content: req.body.comment,
+      content: req.body.content,
     });
 
     newComment.save((err, comment) => {
@@ -156,19 +156,35 @@ export const update_post = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.user || req.user._id.toString() !== req.params.id) {
-    res.sendStatus(403);
+  if (!req.user) {
+    res.sendStatus(401);
     return;
   }
-  Post.findByIdAndUpdate(req.params.id, req.body as IPost, { new: true }).exec(
-    (err) => {
+  Post.findById(req.params.id)
+    .populate("author")
+    .exec((err, post) => {
       if (err) {
         return next(err);
       }
-      res.sendStatus(204);
-      return;
-    }
-  );
+      if (!post) {
+        res.sendStatus(404);
+        return;
+      }
+      if (!req.user || req.user._id.toString() !== post.author._id.toString()) {
+        res.sendStatus(403);
+        return;
+      }
+      Post.findOneAndReplace({_id: req.params.id},  req.body as IPost, {
+        new: true,
+      }).exec((err, updatedPost) => {
+        console.log(updatedPost);
+        if (err) {
+          return next(err);
+        }
+        res.sendStatus(204);
+        return;
+      });
+    });
 };
 
 export const get_user_posts = (
@@ -199,10 +215,10 @@ export const get_user_posts = (
 
 export const get_user = (req: Request, res: Response, next: NextFunction) => {
   User.findById(req.params.id).exec((err, user) => {
-    if(err){
+    if (err) {
       return next(err);
     }
-    if(!user){
+    if (!user) {
       res.sendStatus(404);
       return;
     }
@@ -211,4 +227,4 @@ export const get_user = (req: Request, res: Response, next: NextFunction) => {
       _id: user._id,
     });
   });
-}
+};
