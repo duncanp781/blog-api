@@ -202,7 +202,8 @@ export const get_user_posts = (
         res.json(posts);
       });
   } else {
-    Post.find({ user: req.params.id, public: true })
+    // If not logged in as the user being requested, only show public
+    Post.find({author: req.params.id, public: true })
       .populate("author", "username")
       .exec((err, posts) => {
         if (err) {
