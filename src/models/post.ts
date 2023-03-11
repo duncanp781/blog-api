@@ -7,6 +7,7 @@ export interface IPost {
   content: string,
   author: mongoose.Types.ObjectId,
   public: boolean,
+  isMD?: boolean, 
 }
 
 const Post = new Schema<IPost>({
@@ -14,6 +15,7 @@ const Post = new Schema<IPost>({
   content: {type: String, required: true,},
   author: {type: Schema.Types.ObjectId, required: true, ref: "User"},
   public: {type: Boolean, required: true},
+  isMD : {type: Boolean, required: false},
 }, {timestamps: true});
 
 export default mongoose.model<IPost>("Post", Post);

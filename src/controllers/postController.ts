@@ -12,11 +12,13 @@ export const create_post = (
     res.sendStatus(401);
     return;
   }
+  // If the post doesn't specify if it is MD, we assume it isnt.
   const newPost = new Post<IPost>({
     title: req.body.title,
     content: req.body.content,
     author: req.user._id,
     public: req.body.public,
+    isMD: req.body.isMD || false,
   });
 
   newPost.save((err, post) => {
